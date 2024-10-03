@@ -1,0 +1,178 @@
+body{
+    margin: 0;
+    background-color: #3b1f3a;
+    width: 100%;
+    height: 100%;
+  }
+.game-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+.game-board {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  width: 600px;
+  height: 400px;
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  }
+    
+.row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+.game-board .slot:nth-child(even) {
+  background-color: #c2c2c2;
+}
+  
+.game-board .slot:nth-child(odd) {
+    background-color: #010012;
+    color: white;
+}
+
+.row:nth-child(even) .slot:nth-child(odd) {
+    background-color: #c2c2c2;
+    color: black;
+}
+
+.row:nth-child(even) .slot:nth-child(even) {
+    background-color: #1c1c1e;
+    color: white;
+}
+.slot {
+  width: 80px; /* Fixed width for each slot */
+  height: 120px; /* Fixed height for each slot */
+  border: 2px solid black; 
+  display: flex; /* Make sure card will align properly within */
+  justify-content: center; /* Center card horizontally */
+  align-items: center; /* Center card vertically */
+  position: relative; /* Ensure child elements like cards are aligned relative to slot */
+  padding: 0; /* Remove padding */
+}
+.player-hand {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+/* Label style */
+.player-label {
+  position: absolute;
+  z-index: -1; /* Moves the label behind the player-hand */
+  font-size: 24px; /* Example font size */
+  color: #ffffff; /* Example color */
+  opacity: 0.5; /* Makes the label semi-transparent, optional */
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  padding: 10px;
+}
+
+
+/* Positioning labels for Player 1 and Player 2 */
+.player-label.left {
+  position: fixed; /* Keeps the element in place even when scrolling */
+  left: 10px;      /* Adjust this to place it on the left side */
+  top: 80%;        /* Center vertically */
+  z-index: 999;    /* Place this on top of other elements */
+  width: 120px;
+  height: 90px;
+  background-color: blue;
+}
+
+.player-label.right {
+  position: fixed; /* Keeps the element in place even when scrolling */
+  left: 10px;      /* Adjust this to place it on the left side */
+  top: 10%;        
+  z-index: 999;    /* Place this on top of other elements */
+  width: 120px;
+  height: 90px;
+  background-color: red;
+}
+.card {
+  background-color: #2b4f8e; /* Rich blue color */
+  border: 2px solid #e5c100; /* Gold border */
+  width: 80px;
+  height: 100px;
+  border-radius: 8px;
+  padding: 10px;
+  color: #fff; /* White text */
+  font-family: 'Georgia', serif;
+  text-align: center;
+  cursor: pointer;
+}
+.card.P1selected {
+  border-color: blue; /* Highlight selected card */
+  transform: translateY(-20px);
+}
+.card:hover {
+  transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
+}
+.card.P2selected {
+  border-color: red; /* Highlight selected card */
+  transform: translateY(-20px);
+}
+.card:hover{
+  transform: translateY(-10px);
+}
+.player1-control{
+  border: 3px solid blue;
+}
+.player2-control{
+  border: 3px solid red;
+}
+.row-points{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #010012;
+    color: white;
+}
+.hidden-card {
+    background-color: #1c1c1e; /* Dark background for hidden cards */
+    border: 2px solid #8a8a8a; /* Silver border */
+    color: transparent; /* Hide the text */
+    width: 80px;
+    height: 100px;
+    text-align: center;
+    line-height: 120px;
+    border-radius: 8px;
+}
+
+/* Overlay container for the skip button and indicators */
+.overlay {
+    position: fixed; /* Keeps the element in place even when scrolling */
+    left: 10px;      /* Adjust this to place it on the left side */
+    top: 50%;        /* Center vertically */
+    transform: translateY(-50%); /* Adjust for centering */
+    z-index: 999;    /* Place this on top of other elements */
+    background-color: rgba(255, 255, 255, 0.8); /* Slight background transparency */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+#skipTurnBtn {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#player-info,
+#turn-indicator {
+    margin: 5px 0;
+}
+.player1turn{
+  background-color: blue;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+.player2turn{
+  background-color: red;
+  color: white;
+}
