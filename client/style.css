@@ -56,6 +56,9 @@ body{
   position: relative; /* Ensure child elements like cards are aligned relative to slot */
   padding: 0; /* Remove padding */
 }
+.slot:hover{
+  border: 3px solid white;
+}
 .player-hand {
   display: flex;
   justify-content: center;
@@ -67,7 +70,6 @@ body{
   z-index: -1; /* Moves the label behind the player-hand */
   font-size: 24px; /* Example font size */
   color: #ffffff; /* Example color */
-  opacity: 0.5; /* Makes the label semi-transparent, optional */
   font-family: 'Georgia', serif;
   font-weight: bold;
   padding: 10px;
@@ -80,22 +82,76 @@ body{
   left: 10px;      /* Adjust this to place it on the left side */
   top: 80%;        /* Center vertically */
   z-index: 999;    /* Place this on top of other elements */
-  width: 120px;
-  height: 90px;
-  background-color: blue;
+  width: 300px;
+  height: 30px;
+  background: linear-gradient(grey, white);
+  border: 5px solid;
+  border-image: linear-gradient(135deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4) 1;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
 }
-
+.back-half-left{
+  position: fixed; /* Keeps the element in place even when scrolling */
+  left: 10px;      /* Adjust this to place it on the left side */
+  top: 80%;        /* Center vertically */
+  z-index: 998;    /* Place this on top of other elements */
+  width: 350px;
+  height: 55px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4); /* Metallic gradient */
+  border: 3px solid;
+  border-image: linear-gradient(135deg, #b8b8b8, #f0f0f0, #8f8f8f, #f0f0f0, #b8b8b8) 1;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3), /* Outer shadow */
+              inset 0px 4px 8px rgba(255, 255, 255, 0.2), /* Inner glow for metallic shine */
+              inset 0px -4px 8px rgba(0, 0, 0, 0.2); /* Darker inner shadow */
+}
 .player-label.right {
   position: fixed; /* Keeps the element in place even when scrolling */
   left: 10px;      /* Adjust this to place it on the left side */
-  top: 10%;        
+  top: 10%;        /* Center vertically */
   z-index: 999;    /* Place this on top of other elements */
-  width: 120px;
-  height: 90px;
-  background-color: red;
+  width: 300px;
+  height: 30px;
+  background: linear-gradient(grey, white);
+  border: 5px solid;
+  border-image: linear-gradient(135deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4) 1;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
+}
+.back-half-right{
+  position: fixed; /* Keeps the element in place even when scrolling */
+  left: 10px;      /* Adjust this to place it on the left side */
+  top: 10%;        /* Center vertically */
+  z-index: 998;    /* Place this on top of other elements */
+  width: 350px;
+  height: 55px;
+  background: linear-gradient(145deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4); /* Metallic gradient */
+  border: 3px solid;
+  border-image: linear-gradient(135deg, #b8b8b8, #f0f0f0, #8f8f8f, #f0f0f0, #b8b8b8) 1;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3), /* Outer shadow */
+              inset 0px 4px 8px rgba(255, 255, 255, 0.2), /* Inner glow for metallic shine */
+              inset 0px -4px 8px rgba(0, 0, 0, 0.2); /* Darker inner shadow */
+}
+.player-label.left div{
+  width: 290px;
+  height: 30px;
+  padding-left: 10px;
+  clip-path: polygon(0 0, 84% 0, 95.8% 100%, 0% 100%);
+  background-color: #8a8a8a;
+  background: linear-gradient(to right, #8a8a8a, blue);
+}
+.player-label.right div{
+  width: 290px;
+  height: 30px;
+  padding-left: 10px;
+  clip-path: polygon(0 0, 84% 0, 95.8% 100%, 0% 100%);
+  background-color: #8a8a8a;
+  background: linear-gradient(to right, #8a8a8a, red);
 }
 .card {
   background-color: #2b4f8e; /* Rich blue color */
+  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
   border: 2px solid #e5c100; /* Gold border */
   width: 80px;
   height: 100px;
@@ -105,6 +161,9 @@ body{
   font-family: 'Georgia', serif;
   text-align: center;
   cursor: pointer;
+  position: relative;
+  transform-origin: bottom center; /* Important for rotation */
+  transition: transform 0.3s ease-in-out;
 }
 .card.P1selected {
   border-color: blue; /* Highlight selected card */
@@ -120,6 +179,63 @@ body{
 }
 .card:hover{
   transform: translateY(-10px);
+}
+.effect-canvas {
+  width: 30px;
+  height: 30px;
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 25px;  /* Position the canvas at the bottom */
+  left: 50%;  /* Center the canvas horizontally */
+  transform: translateX(-50%);  /* Center adjust */
+}
+/* Positioning the points in the top-right corner */
+.card-points {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.7); /* Optional background for visibility */
+  color: #fff; /* White text */
+  padding: 2px 2x;
+  font-size: 12px;
+  border-radius: 3px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; /* Creates a circle */
+  border: 2px solid #e5c100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* Styling the card name at the bottom */
+.card-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #000;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px;
+  text-align: center;
+  border-bottom-left-radius: 8px; /* Creates the inward curve */
+  border-bottom-right-radius: 8px; /* Creates the inward curve */
+  box-shadow: 0 -5px 10px rgba(0,0,0,0.5); /* Optional: Adds a shadow for effect */
+}
+/* Position rank icon in top-left */
+.rank-icon {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 20px;
+  height: 20px;
+}
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%; /* Creates a circle */
+  background-color: #fff; /* Default white background for circles */
 }
 .player1-control{
   border: 3px solid blue;
@@ -152,10 +268,12 @@ body{
     top: 50%;        /* Center vertically */
     transform: translateY(-50%); /* Adjust for centering */
     z-index: 999;    /* Place this on top of other elements */
-    background-color: rgba(255, 255, 255, 0.8); /* Slight background transparency */
+    background: linear-gradient(to left, red 50%, blue 50%) right;
+    background-size: 200% 100%;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease-in-out; /* Transition on the background change */
 }
 
 #skipTurnBtn {
@@ -168,11 +286,10 @@ body{
     margin: 5px 0;
 }
 .player1turn{
-  background-color: blue;
+  background-position: left;
   color: white;
-  transition: all 0.2s ease-in-out;
 }
 .player2turn{
-  background-color: red;
+  background-position: right;
   color: white;
 }

@@ -10,40 +10,6 @@
   let opponentHand = [];
   let currentTurn = null;
 
-  // Your predefined deck of cards
-const p1Deck = [
-    { name: 'Cactuar', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Cactuar', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Crab', points: 5, ability: 'destroy', rank: 2 },
-    { name: 'Crab', points: 5, ability: 'destroy', rank: 2 },
-    { name: 'Chocobo', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Cloud', points: 4, ability: 'buff', rank: 2 },
-    { name: 'Tifa', points: 4, ability: 'destroy', rank: 1 },
-    { name: 'Barret', points: 3, ability: 'buff', rank: 2 },
-    { name: 'RedXIII', points: 5, ability: 'destroy', rank: 1 },
-    { name: 'Vincent', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Cid', points: 4, ability: 'buff', rank: 4 },
-    { name: 'Aerith', points: 4, ability: 'destroy', rank: 1 },
-    { name: 'Cid', points: 4, ability: 'buff', rank: 4 },
-    { name: 'Chocobo', points: 3, ability: 'buff', rank: 1 }
-  ];
-  const p2deck = [
-    { name: 'Soldier', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Soldier', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Soldier Officer', points: 5, ability: 'destroy', rank: 2 },
-    { name: 'Soldier Officer', points: 5, ability: 'destroy', rank: 2 },
-    { name: 'Soldier', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Sephiroth', points: 4, ability: 'buff', rank: 2 },
-    { name: 'Rufus', points: 4, ability: 'destroy', rank: 1 },
-    { name: 'Heidiger', points: 3, ability: 'buff', rank: 2 },
-    { name: 'Hojo', points: 5, ability: 'destroy', rank: 1 },
-    { name: 'Palmer', points: 3, ability: 'buff', rank: 1 },
-    { name: 'Reeve', points: 4, ability: 'buff', rank: 4 },
-    { name: 'Scarlet', points: 4, ability: 'destroy', rank: 1 },
-    { name: 'Pres. Shinra', points: 4, ability: 'buff', rank: 4 },
-    { name: 'Soldier', points: 3, ability: 'buff', rank: 1 }
-  ];
-
 // ------------------------------------------SERVER--------------------------------------------
 // Establish connection with the server
 const socket = io();
@@ -160,17 +126,6 @@ socket.on('hand-updated', (data) => {
     document.getElementById('player-info').innerText = `You are Player ${playerNum}`;
   }
   
-  // When a player makes a move
-  function makeMove(moveData) {
-    socket.emit('move', moveData); // Send to server
-    handlePlayerMove(moveData);    // Handle locally
-  }
-  
-  // When receiving the opponent's move
-  socket.on('move', (moveData) => {
-    handleOpponentMove(moveData); // Update game state based on the move
-  });  
-  
   socket.on('game-full', () => {
     alert('The game is full. Please try again later.');
   });
@@ -187,9 +142,19 @@ socket.on('hand-updated', (data) => {
     // Get the slot element where the card was placed
     console.log(slotDestination);
     const slotElement = document.getElementById(slotDestination);
+    cardElement = document.createElement('div');
+    cardElement.classList.add('card');
+
     if (slotElement) {
         // Place the card on the client-side for all players
-        slotElement.innerHTML = `<div class="card">${selectedCard.name} (${selectedCard.points})</div>`;
+        slotElement.innerHTML = '';
+      slotElement.appendChild(cardElement);
+        // Create the card name element
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('card-name');
+        nameElement.innerText = `${selectedCard.name}`;
+        cardElement.appendChild(nameElement);
+
         slotElement.setAttribute('data-occupied', 'true');
         slotElement.setAttribute('data-points', selectedCard.points);
         slotElement.setAttribute('data-controlled-by', playerNum);
@@ -261,6 +226,7 @@ const pawnCounts = {
     
 };
 
+
 // Display the player's hand in the UI
 function displayHand(hand, player, isOpponent = false) {
     const handElement = document.getElementById(`player${player}-hand`);
@@ -276,17 +242,90 @@ function displayHand(hand, player, isOpponent = false) {
             cardElement.classList.add('hidden-card');  // You can style this class for a "card back" look
         } else {
             // Show full card details for the current player
-            cardElement.innerText = `${card.name} (${card.points}) Rank: ${card.rank}`;
             cardElement.dataset.cardId = card.id;
 
             // Add click event to select the card if it's the player's hand
             cardElement.addEventListener('click', () => selectCard(cardElement, card));
+
+            const pointsElement = document.createElement('div');
+            pointsElement.classList.add('card-points');
+            pointsElement.innerText = card.points;
+    
+            // Append the points element to the card
+            cardElement.appendChild(pointsElement);
+
+            // Create the card name element
+            const nameElement = document.createElement('div');
+            nameElement.classList.add('card-name');
+            nameElement.innerText = card.name;
+            cardElement.appendChild(nameElement);
+
+            // Add circles based on the card's rank
+            const rankIcon = document.createElement('div');
+            rankIcon.classList.add('rank-icon');
+
+            // Generate circles based on the rank of the card
+            for (let i = 0; i < card.rank; i++) {
+                const circle = document.createElement('div');
+                circle.classList.add('circle');
+                rankIcon.appendChild(circle);
+            }
+
+            cardElement.appendChild(rankIcon); // Attach the rank circles to the card element
+
+            // Create a canvas element for the effect pattern
+            const effectCanvas = document.createElement('canvas');
+            effectCanvas.classList.add('effect-canvas');
+            effectCanvas.width = 60;
+            effectCanvas.height = 60;
+            cardElement.appendChild(effectCanvas);
+
+            // Call drawEffectPattern to render the effect pattern on the canvas
+            drawEffectPattern(effectCanvas, card.effectPattern, player);
         }
 
         handElement.appendChild(cardElement);
     });
 }
 
+function drawEffectPattern(canvas, effectPattern, playerNum) {
+  const ctx = canvas.getContext('2d');
+  const cellSize = 20;
+  
+  // Clear the canvas first
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw the grid (3x3)
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 3; col++) {
+      // Set default color for grid cells
+      ctx.fillStyle = '#c2c2c2';
+      ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+      ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
+    }
+  }
+
+  // Reverse the effectPattern for Player 2
+  const adjustedPattern = playerNum === 2
+    ? effectPattern.map(([rOffset, cOffset]) => [rOffset, -cOffset])
+    : effectPattern;
+  
+  // Highlight the effect cells based on the pattern
+  adjustedPattern.forEach(([rOffset, cOffset]) => {
+    const targetRow = 1 + rOffset;  // Offset from the center
+    const targetCol = 1 + cOffset;  // Offset from the center
+
+    // Highlight affected cell
+    if (targetRow >= 0 && targetRow < 3 && targetCol >= 0 && targetCol < 3) {
+      ctx.fillStyle = '#FF5722';  // Color for affected cells
+      ctx.fillRect(targetCol * cellSize, targetRow * cellSize, cellSize, cellSize);
+    }
+  });
+
+  // Highlight the center (card position)
+  ctx.fillStyle = 'yellow'; // Center color
+  ctx.fillRect(cellSize, cellSize, cellSize, cellSize);
+}
 
 // Function to update pawn count display (optional for visual feedback)
 function showPawnCountDisplay() {
@@ -367,14 +406,52 @@ const placeCard = (slotElement) => {
 function updateHandDisplay(hand, playerNum, isOpponent) {
     const handElement = document.getElementById(`player${playerNum}-hand`);
     handElement.innerHTML = '';  // Clear the current hand display
+
+    // Extract the number from the hand's ID to determine which hand to hide
+    const handId = handElement.id;  // Example: "player1-hand"
+    const extractedPlayerNum = parseInt(handId.match(/\d+/)[0], 10);  // Extract the number, e.g., 1 or 2
+    
     hand.forEach(card => {
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
+
         // Show full card details for the current player
-        cardElement.innerText = `${card.name} (${card.points}) Rank: ${card.rank}`;
         cardElement.dataset.cardId = card.id;
         cardElement.addEventListener('click', () => selectCard(cardElement, card));
+        // Add Points display
+        const pointsElement = document.createElement('div');
+        pointsElement.classList.add('card-points');
+        pointsElement.innerText = card.points;
+        cardElement.appendChild(pointsElement);
+        // Create the card name element
+        const nameElement = document.createElement('div');
+        nameElement.classList.add('card-name');
+        nameElement.innerText = card.name;
+        cardElement.appendChild(nameElement);
+        // Add circles based on the card's rank
+        const rankIcon = document.createElement('div');
+        rankIcon.classList.add('rank-icon');
+
+        // Generate circles based on the rank of the card
+        for (let i = 0; i < card.rank; i++) {
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+            rankIcon.appendChild(circle);
+        }
+
+        cardElement.appendChild(rankIcon); // Attach the rank circles to the card element
+        // Add canvas for effect pattern
+        const effectCanvas = document.createElement('canvas');
+        effectCanvas.classList.add('effect-canvas');
+        effectCanvas.width = 60;  // Adjust the width of the canvas
+        effectCanvas.height = 60;  // Adjust the height of the canvas
+        cardElement.appendChild(effectCanvas);
+
+        // Draw the effect pattern on the canvas
+        drawEffectPattern(effectCanvas, card.effectPattern, playerNum);
+
         handElement.appendChild(cardElement);
+        
     });
 }
 
