@@ -19,6 +19,12 @@ const socket = io();
     console.log('Connected to server');
   });
 
+  socket.on('spectator-accepted', () => {
+    document.getElementById('role-selection').style.display = 'none';
+    document.getElementById('chat-container').style.display = 'block';
+    console.log('You are a spectator');
+  });
+
 // Listen for the player number assignment
 socket.on('player-number', (number) => {
     playerNum = number;
@@ -148,12 +154,18 @@ socket.on('hand-updated', (data) => {
     if (slotElement) {
         // Place the card on the client-side for all players
         slotElement.innerHTML = '';
-      slotElement.appendChild(cardElement);
+        slotElement.appendChild(cardElement);
         // Create the card name element
         const nameElement = document.createElement('div');
         nameElement.classList.add('card-name');
         nameElement.innerText = `${selectedCard.name}`;
         cardElement.appendChild(nameElement);
+
+        // Assign a unique background image to each card
+        const cardImageUrl = `url('images/${selectedCard.name.toLowerCase()}.png')`; // Assuming you have images with card names
+        cardElement.style.backgroundImage = cardImageUrl;
+        cardElement.style.backgroundSize = 'cover'; // Make the image cover the entire card
+        cardElement.style.backgroundPosition = 'center'; // Center the background image
 
         slotElement.setAttribute('data-occupied', 'true');
         slotElement.setAttribute('data-points', selectedCard.points);
@@ -216,7 +228,51 @@ socket.on('message', (message)=> {
     console.log(message);
 });
 
+  // Receive chat message
+  socket.on('chat-message', (msg) => {
+    const chatBox = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.innerText = msg;
+    chatBox.appendChild(messageElement);
+});
+
+// -------------------------------------------Chat Logic-----------------------------------------
+
+  // Send chat message
+  function sendMessage() {
+    const msg = document.getElementById('chat-input').value;
+    socket.emit('chat-message', msg);
+    document.getElementById('chat-input').value = ''; // Clear input
+  }
+
+// -------------------------------------------Room Logic-----------------------------------------
+
+  // Function to join a room
+  function joinRoom(roomName, role) {
+    socket.emit('join-room', roomName, role);
+  }
+
+  // Function to leave a room
+  function leaveRoom(roomName) {
+    socket.emit('leave-room', roomName);
+  }
+
+  // Listen for room-specific messages
+  socket.on('room-message', (message) => {
+    console.log('Room Message:', message);
+  });
+
+  // Listen for chat messages in the room
+  socket.on('chat-message', (message) => {
+    console.log('Chat:', message);
+  });
+
 // -------------------------------------------Game Logic-----------------------------------------
+
+  // Choose role
+function chooseRole(role) {
+  socket.emit('role-chosen', role);
+}
 
 // Pawn counts for each slot
 const pawnCounts = {
@@ -264,6 +320,12 @@ function displayHand(hand, player, isOpponent = false) {
             const rankIcon = document.createElement('div');
             rankIcon.classList.add('rank-icon');
 
+            // Assign a unique background image to each card
+            const cardImageUrl = `url('images/${card.name.toLowerCase()}.png')`; // Assuming you have images with card names
+            cardElement.style.backgroundImage = cardImageUrl;
+            cardElement.style.backgroundSize = 'cover'; // Make the image cover the entire card
+            cardElement.style.backgroundPosition = 'center'; // Center the background image
+
             // Generate circles based on the rank of the card
             for (let i = 0; i < card.rank; i++) {
                 const circle = document.createElement('div');
@@ -281,14 +343,14 @@ function displayHand(hand, player, isOpponent = false) {
             cardElement.appendChild(effectCanvas);
 
             // Call drawEffectPattern to render the effect pattern on the canvas
-            drawEffectPattern(effectCanvas, card.effectPattern, player);
+            drawEffectPattern(effectCanvas, card.effectPattern, player, 'grey', 'yellow','#ffffff');
         }
 
         handElement.appendChild(cardElement);
     });
 }
 
-function drawEffectPattern(canvas, effectPattern, playerNum) {
+function drawEffectPattern(canvas, effectPattern, playerNum, gridColor = 'grey', effectColor = 'yellow', centerColor = '#ffffff') {
   const ctx = canvas.getContext('2d');
   const cellSize = 20;
   
@@ -299,7 +361,7 @@ function drawEffectPattern(canvas, effectPattern, playerNum) {
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 3; col++) {
       // Set default color for grid cells
-      ctx.fillStyle = '#c2c2c2';
+      ctx.fillStyle = gridColor;
       ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
       ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
     }
@@ -317,13 +379,13 @@ function drawEffectPattern(canvas, effectPattern, playerNum) {
 
     // Highlight affected cell
     if (targetRow >= 0 && targetRow < 3 && targetCol >= 0 && targetCol < 3) {
-      ctx.fillStyle = '#FF5722';  // Color for affected cells
+      ctx.fillStyle = effectColor;  // Color for affected cells
       ctx.fillRect(targetCol * cellSize, targetRow * cellSize, cellSize, cellSize);
     }
   });
 
   // Highlight the center (card position)
-  ctx.fillStyle = 'yellow'; // Center color
+  ctx.fillStyle = centerColor; // Center color
   ctx.fillRect(cellSize, cellSize, cellSize, cellSize);
 }
 
@@ -406,7 +468,7 @@ const placeCard = (slotElement) => {
 function updateHandDisplay(hand, playerNum, isOpponent) {
     const handElement = document.getElementById(`player${playerNum}-hand`);
     handElement.innerHTML = '';  // Clear the current hand display
-
+    console.log(hand);
     // Extract the number from the hand's ID to determine which hand to hide
     const handId = handElement.id;  // Example: "player1-hand"
     const extractedPlayerNum = parseInt(handId.match(/\d+/)[0], 10);  // Extract the number, e.g., 1 or 2
@@ -414,6 +476,12 @@ function updateHandDisplay(hand, playerNum, isOpponent) {
     hand.forEach(card => {
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
+
+        // Assign a unique background image to each card
+        const cardImageUrl = `url('images/${card.name.toLowerCase()}.png')`; // Assuming you have images with card names
+        cardElement.style.backgroundImage = cardImageUrl;
+        cardElement.style.backgroundSize = 'cover'; // Make the image cover the entire card
+        cardElement.style.backgroundPosition = 'center'; // Center the background image
 
         // Show full card details for the current player
         cardElement.dataset.cardId = card.id;

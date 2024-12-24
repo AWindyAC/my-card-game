@@ -9,6 +9,7 @@ let player1Hand = null;
 let player2Hand = null;
 // Game state variables
 let players = {}; // To track connected players
+let spectators = [];
 let playerCount = 0; // To track the number of players
 let gameBoard = {}; // This will store the state of each slot on the game board
 let currentTurn = 1;
@@ -121,36 +122,36 @@ function dealHand(deck) {
 
 // Your predefined deck of cards
 const p1Deck = [
-  { name: 'Cactuar', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
-  { name: 'Cactuar', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
-  { name: 'Crab', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]] },
-  { name: 'Crab', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]] },
-  { name: 'Chocobo', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Cloud', points: 4, ability: 'buff', rank: 2, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Tifa', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Barret', points: 3, ability: 'buff', rank: 2, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'RedXIII', points: 5, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Vincent', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Cid', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Aerith', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Cid', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Chocobo', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]}
+  { name: 'Pawn', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
+  { name: 'Pawn', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
+  { name: 'Knight', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]] },
+  { name: 'Knight', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]] },
+  { name: 'Bishop', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'King', points: 4, ability: 'buff', rank: 2, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Queen', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Queen', points: 3, ability: 'buff', rank: 2, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Bishop', points: 5, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Knight', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Bishop', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Rook', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Rook', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Pawn', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]}
 ];
 const p2deck = [
-  { name: 'Soldier', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
-  { name: 'Soldier', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
-  { name: 'Soldier Officer', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]]},
-  { name: 'Soldier Officer', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]]},
-  { name: 'Soldier', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
-  { name: 'Sephiroth', points: 4, ability: 'buff', rank: 2, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Rufus', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Heidiger', points: 3, ability: 'buff', rank: 2, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
-  { name: 'Hojo', points: 5, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
-  { name: 'Palmer', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
-  { name: 'Reeve', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
-  { name: 'Scarlet', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
-  { name: 'Pres. Shinra', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
-  { name: 'Soldier', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] }
+  { name: 'Dark Pawn', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
+  { name: 'Dark Pawn', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
+  { name: 'Dark Knight', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]]},
+  { name: 'Dark Knight', points: 5, ability: 'destroy', rank: 2, effectPattern: [[-1, 0], [-1, -1],[-1, 1]]},
+  { name: 'Dark Pawn', points: 3, ability: 'buff', rank: 1, effectPattern: [[0, 1], [1, 1],[-1, 1]]},
+  { name: 'Dark King', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Dark Queen', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Dark Queen', points: 3, ability: 'buff', rank: 2, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]]},
+  { name: 'Dark Rook', points: 5, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
+  { name: 'Dark Bishop', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
+  { name: 'Dark Knight', points: 4, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
+  { name: 'Dark Knight', points: 4, ability: 'destroy', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
+  { name: 'Dark King', points: 4, ability: 'buff', rank: 4, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] },
+  { name: 'Dark Pawn', points: 3, ability: 'buff', rank: 1, effectPattern: [[-1, 0], [0, -1],[1, 0], [0, 1]] }
 ];
 
 // Serve static files from the "client" directory
@@ -160,6 +161,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
+
 
 // Function to switch turns
 function switchTurn() {
@@ -171,7 +173,8 @@ function switchTurn() {
 function drawCard(playerNum) {
   let drawnCard;
   if (playerNum === 1 && p1Deck.length > 0) {
-      drawnCard = p2deck.shift(); // Draw the top card from Player 1's deck
+      drawnCard = p1Deck.shift(); // Draw the top card from Player 1's deck
+      console.log(`A card is being added to Player ${currentTurn}'s hand. It is ${drawnCard.name}`);
       player1Hand.push(drawnCard);     // Add it to Player 1's hand
   } else if (playerNum === 2 && p2deck.length > 0) {
       drawnCard = p2deck.shift(); // Draw the top card from Player 2's deck
@@ -190,11 +193,45 @@ function drawCard(playerNum) {
 // Socket.io connection handling
 io.on('connection', (socket) => {
   console.log('A user connected.');
+  let playerNum;
+      // Ask the user if they are a player or a spectator
+      // socket.emit('choose-role');
 
+      // socket.on('role-chosen', (role) =>{})
+
+      // Handle joining a room
+      socket.on('join-room', (roomName, role) => {
+        socket.join(roomName);  // Join the specified room
+        console.log(`User ${socket.id} joined room ${roomName} as ${role}`);
+
+        // Emit a message to just the room
+        io.to(roomName).emit('room-message', `${socket.id} has joined as ${role}`);
+        
+        // If player, assign player role in that room, if spectator, notify room
+        if (role === 'player') {
+            // Handle player-specific setup, e.g., start game logic
+        } else if (role === 'spectator') {
+            // Handle spectator setup, e.g., join chat
+        }
+      });
+
+      // Handle leaving a room
+      socket.on('leave-room', (roomName) => {
+        socket.leave(roomName);
+        console.log(`User ${socket.id} left room ${roomName}`);
+        io.to(roomName).emit('room-message', `${socket.id} has left the room`);
+      });
+
+
+
+      // Broadcast a message to a specific room
+      socket.on('send-message', (roomName, message) => {
+        io.to(roomName).emit('chat-message', message);
+      });
+
+      
       // Check if there are less than 2 players
-      if (playerCount < 2) {
-
-        let playerNum;
+      if (playerCount < 2) {        
         // Assign player number
         if (playerCount === 0) {
             playerCount++;
@@ -202,6 +239,7 @@ io.on('connection', (socket) => {
             players[socket.id] = { playerNum }; // Store player number against socket ID
             console.log(`Players: ${playerCount}`);
             player1Hand = dealHand(p1Deck);
+            console.log('Player 1 hand is dealt.');
             socket.emit('player-number', playerNum);
         } else if (playerCount === 1) {
             playerCount++;
@@ -209,14 +247,19 @@ io.on('connection', (socket) => {
             players[socket.id] = { playerNum }; // Store player number against socket ID
             console.log(`Players: ${playerCount}`);
             player2Hand = dealHand(p2deck);
+            console.log('Player 2 hand is dealt.');
+            console.log(`The hand for ${socket.id}`);
             socket.emit('player-number', playerNum);
         } else {
             socket.emit('game-full');
             return;
         }
+      }
 
     // When both players are connected, send hands to both clients
-    if (player1Hand && player2Hand) {
+    if (playerCount === 2) {
+      console.log('Starting game');
+      gameBoard = {};
       io.emit('game-start', { player1Hand, player2Hand }); // Send hands to both clients
       io.emit('turn-update', { currentTurn });  // Notify that it's Player 1's turn initially
     }
@@ -284,9 +327,16 @@ io.on('connection', (socket) => {
 
         // Update player hands
         if (playerNum === 1) {
-            player1Hand = player1Hand.filter(card => card.name !== selectedCard.name);
+            const cardIndex = player1Hand.findIndex(card => card.id === selectedCard.id);
+            if (cardIndex !== -1) {
+              player1Hand.splice(cardIndex, 1);  // Remove only the selected card by its unique id
+          }
         } else {
-            player2Hand = player2Hand.filter(card => card.name !== selectedCard.name);
+          const cardIndex = player1Hand.findIndex(card => card.id === selectedCard.id);
+
+            if (cardIndex !== -1) {
+              player2Hand.splice(cardIndex, 1);  // Remove only the selected card by its unique id
+          }
         }
 
         // Broadcast the card placement to both players
@@ -302,25 +352,29 @@ io.on('connection', (socket) => {
         switchTurn();
       });
 
-      // Handle skip turn
-      socket.on('skip', ({ playerNum }) => {
-        // Is it the player's turn?
-        if (playerNum !== currentTurn) {
-          socket.emit('invalid-move', 'It is not your turn to skip.');
-          return;
-        }
-
-        consecutiveSkips++;
-
-        if (consecutiveSkips >= 2) {
-          // If both players skipped consecutively, end the game
-          socket.emit('game', 'The game is over.');
-          console.log("Both players skipped consecutively. Ending the game.");
-      } else {
-          // Switch to the other player's turn
-          switchTurn();
-      }
+      socket.on('chat-message', (msg) => {
+        io.emit('chat-message', msg);
       })
+
+    // Handle skip turn
+    socket.on('skip', ({ playerNum }) => {
+      // Is it the player's turn?
+      if (playerNum !== currentTurn) {
+        socket.emit('invalid-move', 'It is not your turn to skip.');
+        return;
+      }
+
+      consecutiveSkips++;
+
+      if (consecutiveSkips >= 2) {
+        // If both players skipped consecutively, end the game
+        socket.emit('game', 'The game is over.');
+        console.log("Both players skipped consecutively. Ending the game.");
+    } else {
+        // Switch to the other player's turn
+        switchTurn();
+    }
+    })
 
       // Listen for game-over event (both players skipped consecutively)
       socket.on('game-over', (data) => {
@@ -359,12 +413,6 @@ io.on('connection', (socket) => {
           currentTurn = 1;
           io.emit('player-update', { players }); // Notify players of disconnection
       });
-  
-    } else {
-      // If more than two players try to join, reject the connection
-      socket.emit('game-full', 'The game is already full.');
-      socket.disconnect();
-    }
 
     socket.on('message', (message) => {
       console.log(message);

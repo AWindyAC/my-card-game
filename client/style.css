@@ -4,6 +4,11 @@ body{
     width: 100%;
     height: 100%;
   }
+  .wrapper{
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+  }
 .game-container {
     height: 100%;
     display: flex;
@@ -64,90 +69,101 @@ body{
   justify-content: center;
   gap: 10px;
 }
-/* Label style */
-.player-label {
+
+/* ------------------CSS for player info top and bottom------------------ */
+/* Container that holds the slanted image and text */
+.top-slanted-image-container {
   position: absolute;
-  z-index: -1; /* Moves the label behind the player-hand */
-  font-size: 24px; /* Example font size */
-  color: #ffffff; /* Example color */
-  font-family: 'Georgia', serif;
+  top: 0px; /* Adjust this to move the container up or down */
+  left:-2px; /* Adjust this to move the container left or right */
+  width: 250px; /* Adjust based on the desired size */
+  height: 150px;
+  text-align: left; /* Center the text below the image */
+}
+
+/* Slanted image with a diagonal bottom slant */
+.top-slanted-image {
+  position: relative;
+  width: 250px;
+  height: 150px; /* Adjust based on the image height */
+  clip-path: polygon(0% 20%, 100% 5%, 100% 90%, 0% 100%); /* Slant from right to left */
+  background-color: red;
+}
+
+.top-slanted-image img {
+  width: 100%;
+  height: 100%;
+  object-fit:cover;
+  object-position: 0px -80px;
+  margin-bottom: -5px;
+}
+
+/* Text below the slanted image */
+.top-slanted-text {
+  font-size: 18px; /* Adjust font size */
+  color: #ffffff; /* Text color */
+  font-family: 'Arial', sans-serif;
   font-weight: bold;
-  padding: 10px;
+  font-size: 20px;
+  padding-left: 20px;
+  background-color: rgba(0, 0, 0, 0.6); /* Optional background to enhance readability */
+  transform: rotate(-3.5deg);
+  clip-path: polygon(0 0, 100% 0%, 80% 100%, 0% 100%);
 }
 
+/* Player 1 info positioned at the bottom right */
+.player1-info {
+  bottom: 10px;
+  right: 20px;
+}
 
-/* Positioning labels for Player 1 and Player 2 */
-.player-label.left {
-  position: fixed; /* Keeps the element in place even when scrolling */
-  left: 10px;      /* Adjust this to place it on the left side */
-  top: 80%;        /* Center vertically */
-  z-index: 999;    /* Place this on top of other elements */
-  width: 300px;
-  height: 30px;
-  background: linear-gradient(grey, white);
-  border: 5px solid;
-  border-image: linear-gradient(135deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4) 1;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
+/* Player 2 info positioned at the top left */
+.player2-info {
+  top: 10px;
+  left: 10px;
 }
-.back-half-left{
-  position: fixed; /* Keeps the element in place even when scrolling */
-  left: 10px;      /* Adjust this to place it on the left side */
-  top: 80%;        /* Center vertically */
-  z-index: 998;    /* Place this on top of other elements */
-  width: 350px;
-  height: 55px;
-  border-radius: 10px;
-  background: linear-gradient(145deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4); /* Metallic gradient */
-  border: 3px solid;
-  border-image: linear-gradient(135deg, #b8b8b8, #f0f0f0, #8f8f8f, #f0f0f0, #b8b8b8) 1;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3), /* Outer shadow */
-              inset 0px 4px 8px rgba(255, 255, 255, 0.2), /* Inner glow for metallic shine */
-              inset 0px -4px 8px rgba(0, 0, 0, 0.2); /* Darker inner shadow */
+
+/* Container for the image and text */
+.image-container {
+  position: fixed;
+  width: 250px; /* Adjust as needed */
+  height: 150px; /* Adjust as needed */
+  display: inline-block;
 }
-.player-label.right {
-  position: fixed; /* Keeps the element in place even when scrolling */
-  left: 10px;      /* Adjust this to place it on the left side */
-  top: 10%;        /* Center vertically */
-  z-index: 999;    /* Place this on top of other elements */
-  width: 300px;
-  height: 30px;
-  background: linear-gradient(grey, white);
-  border: 5px solid;
-  border-image: linear-gradient(135deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4) 1;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
+
+/* Apply the clip-path to create the diagonal slant on the top of the image */
+.slanted-image {
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0% 20%, 100% 5%, 100% 90%, 0% 100%);
+  background-color: blue;
 }
-.back-half-right{
-  position: fixed; /* Keeps the element in place even when scrolling */
-  left: 10px;      /* Adjust this to place it on the left side */
-  top: 10%;        /* Center vertically */
-  z-index: 998;    /* Place this on top of other elements */
-  width: 350px;
-  height: 55px;
-  background: linear-gradient(145deg, #d4d4d4, #f1f1f1, #a9a9a9, #f1f1f1, #d4d4d4); /* Metallic gradient */
-  border: 3px solid;
-  border-image: linear-gradient(135deg, #b8b8b8, #f0f0f0, #8f8f8f, #f0f0f0, #b8b8b8) 1;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3), /* Outer shadow */
-              inset 0px 4px 8px rgba(255, 255, 255, 0.2), /* Inner glow for metallic shine */
-              inset 0px -4px 8px rgba(0, 0, 0, 0.2); /* Darker inner shadow */
+.slanted-image img {
+  width: 100%;
+  height: 100%;
+  object-fit:cover;
+  object-position: 0px -80px;
+  margin-bottom: -5px;
+}  
+/* Text that follows the slanted edge, positioned outside the image */
+.slanted-text {
+  position: absolute;
+  top: -5px; /* Adjust to position the text above the image */
+  left: 0; /* Align to the left of the container */
+  width: 100%;
+  padding-right: 30px;
+  text-align: right;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  transform-origin: left top; /* Adjust origin for better rotation */
+  transform: rotate(-5deg); /* Rotate to match the image slant */
+  font-size: 20px; /* Adjust font size */
+  color: white; /* Text color */
+  clip-path: polygon(10% 10%, 100% 0, 100% 100%, 0% 100%);
+  background-color: rgba(0, 0, 0, 0.7); /* Optional background for contrast */
 }
-.player-label.left div{
-  width: 290px;
-  height: 30px;
-  padding-left: 10px;
-  clip-path: polygon(0 0, 84% 0, 95.8% 100%, 0% 100%);
-  background-color: #8a8a8a;
-  background: linear-gradient(to right, #8a8a8a, blue);
-}
-.player-label.right div{
-  width: 290px;
-  height: 30px;
-  padding-left: 10px;
-  clip-path: polygon(0 0, 84% 0, 95.8% 100%, 0% 100%);
-  background-color: #8a8a8a;
-  background: linear-gradient(to right, #8a8a8a, red);
-}
+/* ------------------------Player info CSS End------------------------- */
+
 .card {
   background-color: #2b4f8e; /* Rich blue color */
   background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
@@ -189,6 +205,8 @@ body{
   bottom: 25px;  /* Position the canvas at the bottom */
   left: 50%;  /* Center the canvas horizontally */
   transform: translateX(-50%);  /* Center adjust */
+  background-color: #262626;
+  border: 1px white solid;
 }
 /* Positioning the points in the top-right corner */
 .card-points {
@@ -292,4 +310,69 @@ body{
 .player2turn{
   background-position: right;
   color: white;
+}
+
+/* ------------------Chat Styling--------------- */
+
+#chat-container {
+  position: fixed;
+  width: 250px;
+  height: 45%;
+  top: 2%;
+  right: 0%;
+  border: 2px solid #333;
+  background-color: #11023c;
+  border: #5892fc solid 3px;
+  box-shadow: 0 0 10px 2px #5892fc;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+#chat-messages {
+  height: 200px;
+  overflow-y: scroll;
+  border: 1px solid #5892fc;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #11023c;
+  color: white;
+}
+
+#chat-input {
+  width: 95%;
+  padding: 5px;
+  border: 1px solid #5892fc;
+  background-color: black;
+  color: white;
+  margin-bottom: 10px;
+}
+.chat-button {
+  background: none;
+  border: 2px solid;
+  border-radius: 15px;
+  font: inherit;
+  line-height: 1;
+  margin: 0.5em;
+  padding: .2rem 1rem;
+  color: #5892fc;
+  transition: 0.25s;
+}
+.chat-button:hover,
+.chat-button:focus {
+  box-shadow: inset 0 0 0 2em #5892fc;
+  border-color: #5892fc;
+  color: #fff;
+}
+
+.role-buttons{
+  position: absolute;
+  top: 600px;
+}
+
+.role-buttons button {
+  padding: 5px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
 }

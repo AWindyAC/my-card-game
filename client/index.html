@@ -7,54 +7,78 @@
   <title>Socket.io Example</title>
 </head>
 <body>
-  <!-- Opponent's Hand -->
-  <div class="player-label right"><div>Player 2</div></div>
-  <div class="back-half-right"></div>
-  <div class="player-hand" id="player2-hand" data-player="2">
-    <!-- Cards will be generated here -->
-  </div>
-  <div class="game-container">
-      <div class="game-board">
-          <div class="row" id="row1">
-          <div class="row-points" id="row1-player1-points">0 points</div>
-          <div class="slot" id="slot1-0" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="1"></div>
-          <div class="slot" id="slot1-1" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot1-2" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot1-3" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot1-4" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="2"></div>
-          <div class="row-points" id="row1-player2-points">0 points</div>
-          </div>
-          <div class="row" id="row2">
-          <div class="row-points" id="row2-player1-points">0 points</div>
-          <div class="slot" id="slot2-0" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="1"></div>
-          <div class="slot" id="slot2-1" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot2-2" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot2-3" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot2-4" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="2"></div>
-          <div class="row-points" id="row2-player2-points">0 points</div>
-          </div>
-          <div class="row" id="row3">
-          <div class="row-points" id="row3-player1-points">0 points</div>
-          <div class="slot" id="slot3-0" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="1"></div>
-          <div class="slot" id="slot3-1" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot3-2" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot3-3" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
-          <div class="slot" id="slot3-4" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="2"></div>
-          <div class="row-points" id="row3-player2-points">0 points</div>
-          </div>
+  <div class="wrapper">
+    <!-- Player 2 Info -->
+    <div class="top-slanted-image-container">
+      <div class="top-slanted-image">
+          <img src="./images/yugi.png" alt="Slanted Image">
       </div>
-  </div>
-    <!-- Player's Hand -->
-    <div class="player-label left"><div>Player 1</div></div>
-    <div class="back-half-left"></div>
-    <div class="player-hand" id="player1-hand" data-player="1">
-    <!-- Cards generated here -->
+      <div class="top-slanted-text">PLAYER 2</div>
+    </div>
+    <!-- Player 2's Hand -->
+    <div class="player-hand" id="player2-hand" data-player="2">
+      <!-- Cards will be generated here -->
     </div>
 
-  <div class="overlay" id="overlay">
-  <button id="skipTurnBtn" onclick="skipTurn()">Skip Turn</button><p id="player-info"></p><p id="turn-indicator"></p>
-  </div>
+    <div class="role-buttons" id="role-selection">
+      <button onclick="chooseRole('player')">Join as Player</button>
+      <button onclick="chooseRole('spectator')">Join as Spectator</button>
+    </div>
 
+    <div class="game-container">
+        <div class="game-board">
+            <div class="row" id="row1">
+            <div class="row-points" id="row1-player1-points">0 points</div>
+            <div class="slot" id="slot1-0" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="1"></div>
+            <div class="slot" id="slot1-1" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot1-2" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot1-3" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot1-4" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="2"></div>
+            <div class="row-points" id="row1-player2-points">0 points</div>
+            </div>
+            <div class="row" id="row2">
+            <div class="row-points" id="row2-player1-points">0 points</div>
+            <div class="slot" id="slot2-0" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="1"></div>
+            <div class="slot" id="slot2-1" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot2-2" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot2-3" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot2-4" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="2"></div>
+            <div class="row-points" id="row2-player2-points">0 points</div>
+            </div>
+            <div class="row" id="row3">
+            <div class="row-points" id="row3-player1-points">0 points</div>
+            <div class="slot" id="slot3-0" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="1"></div>
+            <div class="slot" id="slot3-1" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot3-2" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot3-3" data-occupied="false" data-pawn-count="0" data-points="0" data-controlled-by="0"></div>
+            <div class="slot" id="slot3-4" data-occupied="false" data-pawn-count="1" data-points="0" data-controlled-by="2"></div>
+            <div class="row-points" id="row3-player2-points">0 points</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player 1 Info -->
+    <div class="image-container player1-info">
+      <div class="slanted-image">
+          <img src="./images/yugi.png" alt="Your Image" class="">
+      </div>
+      <div class="slanted-text">PLAYER 1</div>
+    </div>
+      <!-- Player's Hand -->
+      <div class="player-hand" id="player1-hand" data-player="1">
+      <!-- Cards generated here -->
+      </div>
+
+    <div class="overlay" id="overlay">
+    <button id="skipTurnBtn" onclick="skipTurn()">Skip Turn</button><p id="player-info"></p><p id="turn-indicator"></p>
+    </div>
+
+    <div id="chat-container">
+      <div id="chat-messages"></div>
+      <input type="text" id="chat-input" placeholder="Type your message here...">
+      <button class="chat-button" onclick="sendMessage()">Send</button>
+    </div>
+</div>
 
   <!-- Include Socket.io client script -->
   <script src="/socket.io/socket.io.js"></script>
